@@ -1,4 +1,4 @@
-import { Users } from '~/entities/user/user.entity';
+import { Users } from '~/entities/users/users.entity';
 
 export class UserReturnDTO {
   login: string;

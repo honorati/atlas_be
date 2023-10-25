@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -33,9 +34,16 @@ export class UserController {
   @Patch()
   @UsePipes(ValidationPipe)
   async patchEditPassword(
-    @Body() userEditSenhaDTO: UserEditPasswordDTO,
+    @Body() userEditPassDTO: UserEditPasswordDTO,
     @TokenUserId() userid: number,
   ) {
-    return this.userService.editPassword(userid, userEditSenhaDTO);
+    return this.userService.editPassword(userid, userEditPassDTO);
+  }
+
+  @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
+  @Delete()
+  @UsePipes(ValidationPipe)
+  async deleteUser(@TokenUserId() userid: number) {
+    return this.userService.deleteUser(userid);
   }
 }

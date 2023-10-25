@@ -1,5 +1,5 @@
 export interface UserAuth {
-  userid: number;
-  useremail: string;
-  usertipo: number;
+  id: number;
+  email: string;
+  type: number;
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserInsertDTO } from './dtos/user-insert.dto';
-import { Users } from '~/entities/user/user.entity';
+import { Users } from '~/entities/users/users.entity';
 import { createHash } from 'src/utils/hash-phrase';
 import { UserReturnDTO } from './dtos/user-return.dto';
 import { UserEditPasswordDTO } from './dtos/user-edit-passwor.dto';
@@ -131,5 +131,13 @@ export class UserService {
     };
 
     return userReturn;
+  }
+
+  async deleteUser(userId: number): Promise<void> {
+    await this.userRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id: userId })
+      .execute();
   }
 }
