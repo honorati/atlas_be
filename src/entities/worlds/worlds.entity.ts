@@ -1,11 +1,14 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Users } from '../users/users.entity';
 import { WorldImages } from './world-images.entity';
@@ -28,10 +31,16 @@ export class Worlds {
   @Column('character varying', { name: 'image', nullable: true, length: 255 })
   image: string | null;
 
-  @Column('timestamp with time zone', { name: 'deleted_at', nullable: true })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date | null;
+
+  @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @ManyToOne(() => Users, (users) => users.worlds)
+  @ManyToOne(() => Users, (users) => users.worlds, { nullable: false })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: Users;
 

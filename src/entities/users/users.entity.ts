@@ -1,9 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Worlds } from '../worlds/worlds.entity';
 
@@ -56,16 +59,13 @@ export class Users {
   })
   recoverylink: string | null;
 
-  @Column('timestamp with time zone', {
-    name: 'created_at',
-    default: () => 'now()',
-  })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column('timestamp with time zone', { name: 'updated_at', nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date | null;
 
-  @Column('timestamp without time zone', { name: 'deleted_at', nullable: true })
+  @DeleteDateColumn()
   deletedAt: Date | null;
 
   @OneToMany(() => Worlds, (world) => world.user)
