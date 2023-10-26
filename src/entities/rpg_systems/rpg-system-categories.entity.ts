@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RpgSystemAtributtes } from './rpg-system-atributtes';
+import { RpgSystemAtributtes } from './rpg-system-atributtes.entity';
 import { RpgSystems } from './rpg-systems.entity';
 import { Users } from '../users/users.entity';
 

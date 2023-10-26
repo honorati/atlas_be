@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CharacterSheets } from './character-sheets.entity';
-import { RpgSystemAtributtes } from '../rpg_systems/rpg-system-atributtes';
+import { RpgSystemAtributtes } from '../rpg_systems/rpg-system-atributtes.entity';
 import { Users } from '../users/users.entity';
 
 @Index('char_sheet_attributes_pkey', ['id'], { unique: true })

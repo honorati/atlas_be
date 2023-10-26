@@ -19,7 +19,7 @@ import { InterestPoints } from '../interest-points/interest-points.entity';
 import { Organizations } from '../organizations/organizations.entity';
 import { Planes } from '../planes/planes.entity';
 import { Reigns } from '../reigns/reigns.entity';
-import { RpgSystemAtributtes } from '../rpg_systems/rpg-system-atributtes';
+import { RpgSystemAtributtes } from '../rpg_systems/rpg-system-atributtes.entity';
 import { RpgSystemCategories } from '../rpg_systems/rpg-system-categories.entity';
 import { RpgSystems } from '../rpg_systems/rpg-systems.entity';
 import { CharSheetAttacks } from '../character-sheets/char-sheet-attacks.entity';

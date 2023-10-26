@@ -10,8 +10,8 @@ import {
 import { Cities } from '../cities/cities.entity';
 import { InterestPoints } from '../interest-points/interest-points.entity';
 import { Planes } from '../planes/planes.entity';
-import { Worlds } from '../../output/entities/Worlds';
-import { Users } from '../../output/entities/Users';
+import { Users } from '../users/users.entity';
+import { Worlds } from '../worlds/worlds.entity';
 
 @Index('world_reigns_pkey', ['id'], { unique: true })
 @Entity('reigns', { schema: 'public' })

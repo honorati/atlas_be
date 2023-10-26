@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CharacterSheet } from '../character-sheets/character-sheets.entity';
+import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { Users } from '../users/users.entity';
 
 @Index('adversaries_pkey', ['id'], { unique: true })
@@ -74,6 +74,9 @@ export class Adversaries {
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: Users;
 
-  @OneToMany(() => CharacterSheet, (characterSheet) => characterSheet.adversary)
-  characterSheets: CharacterSheet[];
+  @OneToMany(
+    () => CharacterSheets,
+    (characterSheets) => characterSheets.adversary,
+  )
+  characterSheets: CharacterSheets[];
 }
