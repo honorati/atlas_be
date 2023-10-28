@@ -6,6 +6,7 @@ import {
    Param,
    Patch,
    Post,
+   UnauthorizedException,
    UploadedFile,
    UseInterceptors,
    UsePipes,
@@ -68,5 +69,19 @@ export class UserController {
    @UsePipes(ValidationPipe)
    async deleteUser(@TokenUserId() userid: number) {
       return this.userService.deleteUser(userid);
+   }
+
+   @Roles(UserType.ADMIN)
+   @Post('role')
+   @UsePipes(ValidationPipe)
+   async changeRole(
+      @TokenUserId() userid: number,
+      userLogin: string,
+      role: number,
+   ) {
+      if (!userid) {
+         throw new UnauthorizedException();
+      }
+      return this.userService.changeRole(userLogin, role);
    }
 }

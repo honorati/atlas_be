@@ -150,10 +150,7 @@ export class UserService {
       return userReturn;
    }
 
-   async changeAvatar(
-      userId: number,
-      avatar: FileDTO,
-   ): Promise<UserAuthReturn> {
+   async changeAvatar(userId: number, avatar: FileDTO): Promise<UserReturnDTO> {
       const user = await this.getUserById(userId);
 
       await this.fileService.deleteGoogleDrive(user.avatar);
@@ -165,10 +162,32 @@ export class UserService {
       );
       this.userRepository.save(user);
 
-      return {
-         accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
-         user: new UserReturnDTO(user),
+      const userReturn: UserReturnDTO = {
+         login: user.login,
+         avatar: user.avatar,
+         type: user.type,
       };
+
+      return userReturn;
+   }
+
+   async changeRole(userLogin: string, type: number): Promise<UserReturnDTO> {
+      const user = await this.getUserByLogin(userLogin);
+
+      if (!user) {
+         throw new NotFoundException();
+      }
+
+      user.type = type;
+      this.userRepository.save(user);
+
+      const userReturn: UserReturnDTO = {
+         login: user.login,
+         avatar: user.avatar,
+         type: user.type,
+      };
+
+      return userReturn;
    }
 
    async deleteUser(userId: number): Promise<void> {
