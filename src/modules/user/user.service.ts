@@ -18,6 +18,8 @@ import { UserAuthReturn } from '../auth/dtos/user-auth-return.dto';
 import { FileService } from '../file-manager/file.service';
 import { FileDTO } from '../file-manager/dtos/file.dto';
 
+const googleFolder = process.env.GOOGLE_DRIVE_USERS;
+
 @Injectable()
 export class UserService {
    constructor(
@@ -38,7 +40,6 @@ export class UserService {
       if (userEmail) {
          throw new BadRequestException();
       }
-      /*Validando se o login já foi incluido no sistema*/
       const userLogin = await this.getUserByLogin(userDTO.login).catch(
          () => undefined,
       );
@@ -62,7 +63,7 @@ export class UserService {
             user.avatar = await this.fileService.uploadGoogleDrive(
                avatar,
                user.login,
-               process.env.DRIVE_USERS,
+               googleFolder,
             );
          }
          this.userRepository.save(user);
@@ -160,7 +161,7 @@ export class UserService {
       user.avatar = await this.fileService.uploadGoogleDrive(
          avatar,
          user.login,
-         process.env.DRIVE_USERS,
+         googleFolder,
       );
       this.userRepository.save(user);
 
