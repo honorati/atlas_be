@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { google } from 'googleapis';
 import { FileDTO } from './dtos/file.dto';
 import { Readable } from 'stream';
@@ -22,15 +22,19 @@ export class FileService {
          body: Readable.from(file.buffer),
       };
 
-      const resp = await drive.files.create({
-         requestBody: {
-            name: name,
-            parents: [folder],
-         },
-         media: media,
-         fields: 'id',
-      });
-      return resp.data.id;
+      try {
+         const resp = await drive.files.create({
+            requestBody: {
+               name: name,
+               parents: [folder],
+            },
+            media: media,
+            fields: 'id',
+         });
+         return resp.data.id;
+      } catch (error) {
+         throw new InternalServerErrorException();
+      }
    }
 
    async deleteGoogleDrive(fileId: string): Promise<void> {
@@ -40,7 +44,10 @@ export class FileService {
       });
 
       const drive = google.drive({ version: 'v3', auth });
-
-      drive.files.delete({ fileId: fileId });
+      try {
+         drive.files.delete({ fileId: fileId });
+      } catch (error) {
+         throw new InternalServerErrorException();
+      }
    }
 }
