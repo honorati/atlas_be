@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import 'reflect-metadata';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(8080);
-  console.log('Server runing!');
+   const app = await NestFactory.create(AppModule);
+   await app.listen(8080);
+   console.log('Server runing!');
 }
 bootstrap();

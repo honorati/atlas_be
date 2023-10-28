@@ -9,6 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "paths": {
       "~/*": ["./src/*"],
@@ -18,5 +19,5 @@
     "experimentalDecorators": true,
     "incremental": true
   },
-  "include": ["src","test"]
+  "include": ["src","test", "src/entities/users/users.entity.ts"]
 }

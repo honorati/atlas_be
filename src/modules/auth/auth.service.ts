@@ -9,31 +9,34 @@ import { UserAuthReturn } from './dtos/user-auth-return.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UserService,
-    private jwtService: JwtService,
-  ) {}
+   constructor(
+      private readonly userService: UserService,
+      private jwtService: JwtService,
+   ) {}
 
-  async login(authDto: AuthDTO): Promise<UserAuthReturn> {
-    let user = await this.userService.getUserByEmail(authDto.login);
+   async login(authDto: AuthDTO): Promise<UserAuthReturn> {
+      let user = await this.userService.getUserByEmail(authDto.login);
 
-    if (!user) {
-      user = await this.userService.getUserByLogin(authDto.login);
-    }
+      if (!user) {
+         user = await this.userService.getUserByLogin(authDto.login);
+      }
 
-    if (!user) {
-      throw new NotFoundException();
-    }
+      if (!user) {
+         throw new NotFoundException();
+      }
 
-    const isMatch = await validateHash(authDto.password, user?.password || '');
+      const isMatch = await validateHash(
+         authDto.password,
+         user?.password || '',
+      );
 
-    if (!user || !isMatch) {
-      throw new NotFoundException('Email or passord invalid');
-    }
+      if (!user || !isMatch) {
+         throw new NotFoundException('Email or passord invalid');
+      }
 
-    return {
-      accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
-      user: new UserReturnDTO(user),
-    };
-  }
+      return {
+         accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
+         user: new UserReturnDTO(user),
+      };
+   }
 }

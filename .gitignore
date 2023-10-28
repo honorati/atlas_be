@@ -25,6 +25,7 @@ lerna-debug.log*
 .classpath
 .c9/
 .env
+api-key.json
 *.launch
 .settings/
 *.sublime-workspace

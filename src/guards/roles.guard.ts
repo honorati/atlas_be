@@ -7,33 +7,33 @@ import { UserType } from '~/enum/user-type.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly jwtService: JwtService,
-  ) {}
+   constructor(
+      private reflector: Reflector,
+      private readonly jwtService: JwtService,
+   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<UserType[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+   async canActivate(context: ExecutionContext): Promise<boolean> {
+      const requiredRoles = this.reflector.getAllAndOverride<UserType[]>(
+         ROLES_KEY,
+         [context.getHandler(), context.getClass()],
+      );
 
-    if (!requiredRoles) {
-      return true;
-    }
+      if (!requiredRoles) {
+         return true;
+      }
 
-    const { authorization } = context.switchToHttp().getRequest().headers;
+      const { authorization } = context.switchToHttp().getRequest().headers;
 
-    const loginPayload: LoginPayload | undefined = await this.jwtService
-      .verifyAsync(authorization, {
-        secret: process.env.JWT_SECRET,
-      })
-      .catch(() => undefined);
+      const loginPayload: LoginPayload | undefined = await this.jwtService
+         .verifyAsync(authorization, {
+            secret: process.env.JWT_SECRET,
+         })
+         .catch(() => undefined);
 
-    if (!loginPayload) {
-      return false;
-    }
+      if (!loginPayload) {
+         return false;
+      }
 
-    return requiredRoles.some((role) => role === loginPayload.usertipo);
-  }
+      return requiredRoles.some((role) => role === loginPayload.usertipo);
+   }
 }

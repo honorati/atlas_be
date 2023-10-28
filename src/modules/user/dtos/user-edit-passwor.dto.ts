@@ -1,3 +1,3 @@
 export interface UserEditPasswordDTO {
-  password: string;
+   password: string;
 }

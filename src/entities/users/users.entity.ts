@@ -1,12 +1,12 @@
 import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+   Column,
+   CreateDateColumn,
+   DeleteDateColumn,
+   Entity,
+   Index,
+   OneToMany,
+   PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { Worlds } from '../worlds/worlds.entity';
 import { Adventures } from '../adventures/adventures.entity';
@@ -31,111 +31,111 @@ import { CharSheetAttacks } from '../character-sheets/char-sheet-attacks.entity'
 @Index('users_login_uk', ['login'], { unique: true })
 @Entity('users', { schema: 'public' })
 export class Users {
-  @Column('character varying', {
-    name: 'name',
-    nullable: true,
-    length: 255,
-  })
-  name: string | null;
+   @Column('character varying', {
+      name: 'name',
+      nullable: true,
+      length: 255,
+   })
+   name: string | null;
 
-  @Column('character varying', { name: 'email', unique: true, length: 255 })
-  email: string;
+   @Column('character varying', { name: 'email', unique: true, length: 255 })
+   email: string;
 
-  @Column('boolean', { name: 'mailing', nullable: true })
-  mailing: boolean | null;
+   @Column('boolean', { name: 'mailing', nullable: true })
+   mailing: boolean | null;
 
-  @Column('boolean', { name: 'notification', nullable: true })
-  notification: boolean | null;
+   @Column('boolean', { name: 'notification', nullable: true })
+   notification: boolean | null;
 
-  @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
-  id: number;
+   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
+   id: number;
 
-  @Column('character varying', { name: 'login', unique: true, length: 255 })
-  login: string;
+   @Column('character varying', { name: 'login', unique: true, length: 255 })
+   login: string;
 
-  @Column('character varying', { name: 'image', nullable: true, length: 255 })
-  image: string | null;
+   @Column('character varying', { name: 'avatar', nullable: true, length: 255 })
+   avatar: string | null;
 
-  @Column('character varying', {
-    name: 'password',
-    nullable: true,
-    length: 255,
-  })
-  password: string | null;
+   @Column('character varying', {
+      name: 'password',
+      nullable: true,
+      length: 255,
+   })
+   password: string | null;
 
-  @Column('integer', { name: 'type', default: () => '0' })
-  type: number;
+   @Column('integer', { name: 'type', default: () => '0' })
+   type: number;
 
-  @Column('character varying', {
-    name: 'recoverylink',
-    nullable: true,
-    length: 255,
-  })
-  recoverylink: string | null;
+   @Column('character varying', {
+      name: 'recoverylink',
+      nullable: true,
+      length: 255,
+   })
+   recoverylink: string | null;
 
-  @CreateDateColumn()
-  createdAt: Date;
+   @CreateDateColumn()
+   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date | null;
+   @UpdateDateColumn()
+   updatedAt: Date | null;
 
-  @DeleteDateColumn()
-  deletedAt: Date | null;
+   @DeleteDateColumn()
+   deletedAt: Date | null;
 
-  @OneToMany(() => Adventures, (adventures) => adventures.user)
-  adventures: Adventures[];
+   @OneToMany(() => Adventures, (adventures) => adventures.user)
+   adventures: Adventures[];
 
-  @OneToMany(() => Adversaries, (adversaries) => adversaries.user)
-  adversaries: Adversaries[];
+   @OneToMany(() => Adversaries, (adversaries) => adversaries.user)
+   adversaries: Adversaries[];
 
-  @OneToMany(
-    () => CharSheetAttributes,
-    (charSheetAttributes) => charSheetAttributes.user,
-  )
-  charSheetAttributes: CharSheetAttributes[];
+   @OneToMany(
+      () => CharSheetAttributes,
+      (charSheetAttributes) => charSheetAttributes.user,
+   )
+   charSheetAttributes: CharSheetAttributes[];
 
-  @OneToMany(() => CharacterSheets, (characterSheets) => characterSheets.user)
-  characterSheets: CharacterSheets[];
+   @OneToMany(() => CharacterSheets, (characterSheets) => characterSheets.user)
+   characterSheets: CharacterSheets[];
 
-  @OneToMany(() => Characters, (characters) => characters.user)
-  characters: Characters[];
+   @OneToMany(() => Characters, (characters) => characters.user)
+   characters: Characters[];
 
-  @OneToMany(() => Cities, (cities) => cities.user)
-  cities: Cities[];
+   @OneToMany(() => Cities, (cities) => cities.user)
+   cities: Cities[];
 
-  @OneToMany(() => InterestPoints, (interestPoints) => interestPoints.user)
-  interestPoints: InterestPoints[];
+   @OneToMany(() => InterestPoints, (interestPoints) => interestPoints.user)
+   interestPoints: InterestPoints[];
 
-  @OneToMany(() => Organizations, (organizations) => organizations.user)
-  organizations: Organizations[];
+   @OneToMany(() => Organizations, (organizations) => organizations.user)
+   organizations: Organizations[];
 
-  @OneToMany(() => Planes, (planes) => planes.user)
-  planes: Planes[];
+   @OneToMany(() => Planes, (planes) => planes.user)
+   planes: Planes[];
 
-  @OneToMany(() => Reigns, (reigns) => reigns.user)
-  reigns: Reigns[];
+   @OneToMany(() => Reigns, (reigns) => reigns.user)
+   reigns: Reigns[];
 
-  @OneToMany(
-    () => RpgSystemAtributtes,
-    (rpgSystemAtributtes) => rpgSystemAtributtes.user,
-  )
-  rpgSystemAtributtes: RpgSystemAtributtes[];
+   @OneToMany(
+      () => RpgSystemAtributtes,
+      (rpgSystemAtributtes) => rpgSystemAtributtes.user,
+   )
+   rpgSystemAtributtes: RpgSystemAtributtes[];
 
-  @OneToMany(
-    () => RpgSystemCategories,
-    (rpgSystemCategories) => rpgSystemCategories.user,
-  )
-  rpgSystemCategories: RpgSystemCategories[];
+   @OneToMany(
+      () => RpgSystemCategories,
+      (rpgSystemCategories) => rpgSystemCategories.user,
+   )
+   rpgSystemCategories: RpgSystemCategories[];
 
-  @OneToMany(() => RpgSystems, (rpgSystems) => rpgSystems.user)
-  rpgSystems: RpgSystems[];
+   @OneToMany(() => RpgSystems, (rpgSystems) => rpgSystems.user)
+   rpgSystems: RpgSystems[];
 
-  @OneToMany(() => Worlds, (worlds) => worlds.user)
-  worlds: Worlds[];
+   @OneToMany(() => Worlds, (worlds) => worlds.user)
+   worlds: Worlds[];
 
-  @OneToMany(
-    () => CharSheetAttacks,
-    (charSheetAttacks) => charSheetAttacks.user,
-  )
-  charSheetAttacks: CharSheetAttacks[];
+   @OneToMany(
+      () => CharSheetAttacks,
+      (charSheetAttacks) => charSheetAttacks.user,
+   )
+   charSheetAttacks: CharSheetAttacks[];
 }
