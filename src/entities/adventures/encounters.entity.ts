@@ -1,6 +1,7 @@
 import {
    Column,
    Entity,
+   Generated,
    Index,
    JoinColumn,
    ManyToOne,
@@ -15,6 +16,10 @@ import { Opponents } from './opponents.entity';
 export class Encounters {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
+
+   @Column('uuid', { name: 'unique_id' })
+   @Generated('uuid')
+   uniqueId: string;
 
    @Column('character varying', { name: 'name', length: 100 })
    name: string;

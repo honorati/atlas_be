@@ -1,6 +1,7 @@
 import {
    Column,
    Entity,
+   Generated,
    Index,
    JoinColumn,
    ManyToOne,
@@ -10,11 +11,15 @@ import {
 import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { Users } from '../users/users.entity';
 
-@Index('adversaries_pkey', ['id'], { unique: true })
-@Entity('adversaries', { schema: 'public' })
-export class Adversaries {
+@Index('enemies_pkey', ['id'], { unique: true })
+@Entity('enemies', { schema: 'public' })
+export class Enemies {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
+
+   @Column('uuid', { name: 'unique_id' })
+   @Generated('uuid')
+   uniqueId: string;
 
    @Column('character varying', { name: 'name', length: 100 })
    name: string;
@@ -83,7 +88,7 @@ export class Adversaries {
    @Column('text', { name: 'combat', nullable: true })
    combat: string | null;
 
-   @ManyToOne(() => Users, (users) => users.adversaries)
+   @ManyToOne(() => Users, (users) => users.enemies)
    @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
    user: Users;
 

@@ -1,6 +1,7 @@
 import {
    Column,
    Entity,
+   Generated,
    Index,
    JoinColumn,
    ManyToOne,
@@ -13,11 +14,15 @@ import { OrganizationPersons } from '../organizations/organization-persons.entit
 import { Worlds } from '../worlds/worlds.entity';
 import { Users } from '../users/users.entity';
 
-@Index('persons_pkey', ['id'], { unique: true })
+@Index('characters_pkey', ['id'], { unique: true })
 @Entity('characters', { schema: 'public' })
 export class Characters {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
+
+   @Column('uuid', { name: 'unique_id' })
+   @Generated('uuid')
+   uniqueId: string;
 
    @Column('character varying', { name: 'name', length: 255 })
    name: string;

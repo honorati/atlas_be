@@ -8,7 +8,7 @@ import {
    PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CharSheetAttributes } from './char-sheet-attributes.entity';
-import { Adversaries } from '../adversaries/adversaries.entity';
+import { Enemies } from '../enemies/enemies.entity';
 import { Characters } from '../characters/characters.entity';
 import { RpgSystems } from '../rpg_systems/rpg-systems.entity';
 import { CharSheetAttacks } from './char-sheet-attacks.entity';
@@ -41,9 +41,9 @@ export class CharacterSheets {
    )
    charSheetAttributes: CharSheetAttributes[];
 
-   @ManyToOne(() => Adversaries, (adversaries) => adversaries.characterSheets)
+   @ManyToOne(() => Enemies, (adversaries) => adversaries.characterSheets)
    @JoinColumn([{ name: 'adversary_id', referencedColumnName: 'id' }])
-   adversary: Adversaries;
+   adversary: Enemies;
 
    @ManyToOne(() => Characters, (characters) => characters.characterSheets)
    @JoinColumn([{ name: 'character_id', referencedColumnName: 'id' }])

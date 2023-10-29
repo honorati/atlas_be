@@ -3,6 +3,7 @@ import {
    CreateDateColumn,
    DeleteDateColumn,
    Entity,
+   Generated,
    Index,
    OneToMany,
    PrimaryGeneratedColumn,
@@ -10,7 +11,7 @@ import {
 } from 'typeorm';
 import { Worlds } from '../worlds/worlds.entity';
 import { Adventures } from '../adventures/adventures.entity';
-import { Adversaries } from '../adversaries/adversaries.entity';
+import { Enemies } from '../enemies/enemies.entity';
 import { CharSheetAttributes } from '../character-sheets/char-sheet-attributes.entity';
 import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { Characters } from '../characters/characters.entity';
@@ -24,13 +25,20 @@ import { RpgSystemCategories } from '../rpg_systems/rpg-system-categories.entity
 import { RpgSystems } from '../rpg_systems/rpg-systems.entity';
 import { CharSheetAttacks } from '../character-sheets/char-sheet-attacks.entity';
 
+@Index('users_pk', ['id'], { unique: true })
 @Index('user_email_index', ['email'], { unique: true })
 @Index('users_email_uk', ['email'], { unique: true })
-@Index('users_pk', ['id'], { unique: true })
 @Index('user_login_index', ['login'], { unique: true })
 @Index('users_login_uk', ['login'], { unique: true })
 @Entity('users', { schema: 'public' })
 export class Users {
+   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
+   id: number;
+
+   @Column('uuid', { name: 'unique_id' })
+   @Generated('uuid')
+   uniqueId: string;
+
    @Column('character varying', {
       name: 'name',
       nullable: true,
@@ -46,9 +54,6 @@ export class Users {
 
    @Column('boolean', { name: 'notification', nullable: true })
    notification: boolean | null;
-
-   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
-   id: number;
 
    @Column('character varying', { name: 'login', unique: true, length: 255 })
    login: string;
@@ -85,8 +90,8 @@ export class Users {
    @OneToMany(() => Adventures, (adventures) => adventures.user)
    adventures: Adventures[];
 
-   @OneToMany(() => Adversaries, (adversaries) => adversaries.user)
-   adversaries: Adversaries[];
+   @OneToMany(() => Enemies, (enemies) => enemies.user)
+   enemies: Enemies[];
 
    @OneToMany(
       () => CharSheetAttributes,
