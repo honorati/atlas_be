@@ -3,6 +3,7 @@ import {
    CreateDateColumn,
    DeleteDateColumn,
    Entity,
+   Generated,
    Index,
    JoinColumn,
    ManyToOne,
@@ -11,7 +12,6 @@ import {
    UpdateDateColumn,
 } from 'typeorm';
 import { Users } from '../users/users.entity';
-import { WorldImages } from './world-images.entity';
 import { Adventures } from '../adventures/adventures.entity';
 import { Planes } from '../planes/planes.entity';
 import { Characters } from '../characters/characters.entity';
@@ -25,6 +25,10 @@ import { Reigns } from '../reigns/reigns.entity';
 export class Worlds {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
+
+   @Column('uuid', { name: 'unique_id' })
+   @Generated('uuid')
+   uniqueId: string;
 
    @Column('character varying', { name: 'name', length: 100 })
    name: string;
@@ -68,9 +72,6 @@ export class Worlds {
 
    @OneToMany(() => Organizations, (organizations) => organizations.world)
    organizations: Organizations[];
-
-   @OneToMany(() => WorldImages, (worldImages) => worldImages.world)
-   worldImages: WorldImages[];
 
    @OneToMany(() => Characters, (characters) => characters.world)
    characters: Characters[];

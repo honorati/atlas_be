@@ -17,8 +17,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserAuthReturn } from '../auth/dtos/user-auth-return.dto';
 import { FileService } from '../file-manager/file.service';
 import { FileDTO } from '../file-manager/dtos/file.dto';
+import env from 'dotenv';
 
-const googleFolder = process.env.GOOGLE_DRIVE_USERS;
+env.config();
+
+const googleFolder = process.env.DRIVE_USERS;
 
 @Injectable()
 export class UserService {
@@ -150,13 +153,17 @@ export class UserService {
       return userReturn;
    }
 
-   async changeAvatar(userId: number, avatar: FileDTO): Promise<UserReturnDTO> {
+   async changeAvatar(
+      userId: number,
+      newAvatar: FileDTO,
+   ): Promise<UserReturnDTO> {
       const user = await this.getUserById(userId);
-
-      await this.fileService.deleteGoogleDrive(user.avatar);
+      if (user.avatar) {
+         this.fileService.deleteGoogleDrive(user.avatar);
+      }
 
       user.avatar = await this.fileService.uploadGoogleDrive(
-         avatar,
+         newAvatar,
          user.login,
          googleFolder,
       );

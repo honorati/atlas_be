@@ -19,15 +19,11 @@ import { Roles } from '~/decorators/roles.decorator';
 import { UserType } from '~/enum/user-type.enum';
 import { TokenUserId } from '~/decorators/user-id.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileService } from '../file-manager/file.service';
 import { FileDTO } from '../file-manager/dtos/file.dto';
 
 @Controller('user')
 export class UserController {
-   constructor(
-      private readonly userService: UserService,
-      private readonly fileService: FileService,
-   ) {}
+   constructor(private readonly userService: UserService) {}
 
    @Post()
    @UseInterceptors(FileInterceptor('avatar'))

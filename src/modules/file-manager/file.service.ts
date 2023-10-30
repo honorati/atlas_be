@@ -10,6 +10,9 @@ export class FileService {
       name: string,
       folder: string,
    ): Promise<string> {
+      if (folder === undefined) {
+         return null;
+      }
       const auth = new google.auth.GoogleAuth({
          keyFile: 'api-key.json',
          scopes: ['https://www.googleapis.com/auth/drive'],
@@ -32,6 +35,7 @@ export class FileService {
             fields: 'id',
          });
          return resp.data.id;
+         //https://drive.google.com/uc?export=view&id=
       } catch (error) {
          throw new InternalServerErrorException();
       }
@@ -47,7 +51,7 @@ export class FileService {
       try {
          drive.files.delete({ fileId: fileId });
       } catch (error) {
-         throw new InternalServerErrorException();
+         throw new InternalServerErrorException(error);
       }
    }
 }

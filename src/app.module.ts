@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { WorldModule } from './modules/world/world.module';
+import env from 'dotenv';
+
+env.config();
 
 @Module({
    imports: [
@@ -25,6 +29,7 @@ import { JwtModule } from '@nestjs/jwt';
          synchronize: true,
       }),
       UserModule,
+      WorldModule,
       AuthModule,
       JwtModule,
    ],
