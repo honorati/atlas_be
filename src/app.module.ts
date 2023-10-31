@@ -7,9 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WorldModule } from './modules/world/world.module';
-import env from 'dotenv';
-
-env.config();
 
 @Module({
    imports: [

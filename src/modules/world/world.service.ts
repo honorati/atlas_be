@@ -7,6 +7,7 @@ import { WorldDTO } from './dto/world.dto';
 import { FileDTO } from '../file-manager/dtos/file.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Users } from '~/entities/users/users.entity';
+import { v4 as uuidv4 } from 'uuid';
 import env from 'dotenv';
 
 env.config();
@@ -24,7 +25,7 @@ export class WorldService {
       private jwtService: JwtService,
    ) {}
 
-   async manageWorld(
+   async createWorld(
       userId: number,
       worldDTO: WorldDTO,
       image: FileDTO,
@@ -34,19 +35,18 @@ export class WorldService {
          world.name = worldDTO.name;
          world.title = worldDTO.title;
          world.description = worldDTO.description;
+         world.uniqueId = uuidv4();
          world.user = await this.userRepository.findOneBy({
             id: userId,
          });
-         console.log(googleFolder);
          if (image.originalname) {
             world.image = await this.fileService.uploadGoogleDrive(
                image,
-               world.name,
+               world.uniqueId,
                googleFolder,
             );
          }
          await this.worldRepository.save(world);
-         console.log(world);
 
          delete world.user;
          return world;
@@ -54,5 +54,64 @@ export class WorldService {
          console.log(err);
          throw new InternalServerErrorException();
       }
+   }
+
+   async getWorldById(worldId: number): Promise<Worlds> {
+      const world = await this.worldRepository.findOneBy({
+         id: worldId,
+      });
+      console.log(world);
+      return world;
+   }
+
+   async updateWorld(worldDTO: WorldDTO, newImage: FileDTO): Promise<WorldDTO> {
+      try {
+         if (newImage.originalname) {
+            const result = await this.getWorldById(worldDTO.id);
+            if (result.image) {
+               try {
+                  await this.fileService.deleteGoogleDrive(result.image);
+               } catch (error) {
+                  console.log(error);
+               }
+            }
+            if (!result.uniqueId) {
+               worldDTO.uniqueId = uuidv4();
+            } else {
+               worldDTO.uniqueId = result.uniqueId;
+            }
+            worldDTO.image = await this.fileService.uploadGoogleDrive(
+               newImage,
+               worldDTO.uniqueId,
+               googleFolder,
+            );
+         }
+
+         await this.worldRepository
+            .createQueryBuilder()
+            .update(Worlds)
+            .set({
+               name: worldDTO.name,
+               title: worldDTO.title,
+               description: worldDTO.description,
+               image: worldDTO.image,
+               uniqueId: worldDTO.uniqueId,
+            })
+            .where('id = :id', { id: worldDTO.id })
+            .execute();
+
+         return worldDTO;
+      } catch (err) {
+         console.log(err);
+         throw new InternalServerErrorException();
+      }
+   }
+
+   async deleteWorld(worldId: number): Promise<void> {
+      await this.worldRepository
+         .createQueryBuilder()
+         .softDelete()
+         .where('id = :id', { id: worldId })
+         .execute();
    }
 }

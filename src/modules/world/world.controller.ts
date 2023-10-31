@@ -1,6 +1,8 @@
 import {
    Body,
    Controller,
+   Delete,
+   Patch,
    Post,
    UploadedFile,
    UseInterceptors,
@@ -28,6 +30,24 @@ export class WorldController {
       @TokenUserId() userid: number,
       @UploadedFile() fileDTO: FileDTO,
    ) {
-      return this.worldService.manageWorld(userid, worldDTO, fileDTO);
+      return this.worldService.createWorld(userid, worldDTO, fileDTO);
+   }
+
+   @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
+   @Patch()
+   @UsePipes(ValidationPipe)
+   @UseInterceptors(FileInterceptor('image'))
+   async updateWorld(
+      @Body() worldDTO: WorldDTO,
+      @UploadedFile() fileDTO: FileDTO,
+   ) {
+      return this.worldService.updateWorld(worldDTO, fileDTO);
+   }
+
+   @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
+   @Delete()
+   @UsePipes(ValidationPipe)
+   async deleteUser(@TokenUserId() worldId: number) {
+      return this.worldService.deleteWorld(worldId);
    }
 }
