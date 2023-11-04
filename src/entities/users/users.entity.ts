@@ -39,14 +39,14 @@ export class Users {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'name',
       nullable: true,
       length: 255,
    })
    name: string | null;
 
-   @Column('character varying', { name: 'email', unique: true, length: 255 })
+   @Column('varchar', { name: 'email', unique: true, length: 255 })
    email: string;
 
    @Column('boolean', { name: 'mailing', nullable: true })
@@ -55,13 +55,13 @@ export class Users {
    @Column('boolean', { name: 'notification', nullable: true })
    notification: boolean | null;
 
-   @Column('character varying', { name: 'login', unique: true, length: 255 })
+   @Column('varchar', { name: 'login', unique: true, length: 255 })
    login: string;
 
-   @Column('character varying', { name: 'avatar', nullable: true, length: 255 })
+   @Column('varchar', { name: 'avatar', nullable: true, length: 255 })
    avatar: string | null;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'password',
       nullable: true,
       length: 255,
@@ -71,7 +71,7 @@ export class Users {
    @Column('integer', { name: 'type', default: () => '0' })
    type: number;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'recoverylink',
       nullable: true,
       length: 255,

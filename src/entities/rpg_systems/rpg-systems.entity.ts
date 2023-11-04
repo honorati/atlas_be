@@ -1,5 +1,7 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Generated,
    Index,
@@ -7,6 +9,7 @@ import {
    ManyToOne,
    OneToMany,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { RpgSystemCategories } from './rpg-system-categories.entity';
@@ -22,31 +25,25 @@ export class RpgSystems {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', { name: 'name', length: 255 })
+   @Column('varchar', { name: 'name', length: 255 })
    name: string;
 
    @Column('text', { name: 'Description', nullable: true })
    description: string | null;
 
-   @Column('character varying', { name: 'image', nullable: true, length: 255 })
+   @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
-   @Column('character varying', { name: 'source', nullable: true, length: 255 })
+   @Column('varchar', { name: 'source', nullable: true, length: 255 })
    source: string | null;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @OneToMany(

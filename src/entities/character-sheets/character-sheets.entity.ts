@@ -1,11 +1,13 @@
 import {
-   Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Index,
    JoinColumn,
    ManyToOne,
    OneToMany,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { CharSheetAttributes } from './char-sheet-attributes.entity';
 import { Enemies } from '../enemies/enemies.entity';
@@ -20,19 +22,13 @@ export class CharacterSheets {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @OneToMany(

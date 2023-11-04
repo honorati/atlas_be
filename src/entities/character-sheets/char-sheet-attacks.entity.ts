@@ -1,10 +1,13 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Index,
    JoinColumn,
    ManyToOne,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { CharacterSheets } from './character-sheets.entity';
 import { Users } from '../users/users.entity';
@@ -15,25 +18,19 @@ export class CharSheetAttacks {
    @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
    id: number;
 
-   @Column('character varying', { name: 'name', length: 100 })
+   @Column('varchar', { name: 'name', length: 100 })
    name: string;
 
    @Column('text', { name: 'description', nullable: true })
    description: string | null;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @ManyToOne(

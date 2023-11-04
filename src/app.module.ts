@@ -14,7 +14,7 @@ import { WorldModule } from './modules/world/world.module';
          envFilePath: ['.env'],
       }),
       TypeOrmModule.forRoot({
-         type: 'postgres',
+         type: 'mysql',
          database: process.env.DB_DATABASE,
          host: process.env.DB_HOST,
          password: String(process.env.DB_PASSWORD),

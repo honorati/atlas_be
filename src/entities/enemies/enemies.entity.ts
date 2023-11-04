@@ -1,5 +1,7 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Generated,
    Index,
@@ -7,6 +9,7 @@ import {
    ManyToOne,
    OneToMany,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { Users } from '../users/users.entity';
@@ -21,29 +24,29 @@ export class Enemies {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', { name: 'name', length: 100 })
+   @Column('varchar', { name: 'name', length: 100 })
    name: string;
 
-   @Column('character varying', { name: 'title', nullable: true, length: 255 })
+   @Column('varchar', { name: 'title', nullable: true, length: 255 })
    title: string | null;
 
    @Column('integer', { name: 'experience', nullable: true })
    experience: number | null;
 
-   @Column('character varying', { name: 'image', nullable: true, length: 255 })
+   @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'concept',
       nullable: true,
       length: 255,
    })
    concept: string | null;
 
-   @Column('character varying', { name: 'size', nullable: true, length: 255 })
+   @Column('varchar', { name: 'size', nullable: true, length: 255 })
    size: string | null;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'alignment',
       nullable: true,
       length: 255,
@@ -53,32 +56,23 @@ export class Enemies {
    @Column('text', { name: 'habitat', nullable: true })
    habitat: string | null;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'quantity',
       nullable: true,
       length: 255,
    })
    quantity: string | null;
 
-   @Column('timestamp without time zone', {
-      name: 'created_at',
-      nullable: true,
-   })
+   @CreateDateColumn()
    createdAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'movement',
       nullable: true,
       length: 255,

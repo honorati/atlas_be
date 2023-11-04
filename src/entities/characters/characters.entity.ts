@@ -1,5 +1,7 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Generated,
    Index,
@@ -8,6 +10,7 @@ import {
    OneToMany,
    OneToOne,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { CharacterSheets } from '../character-sheets/character-sheets.entity';
 import { OrganizationPersons } from '../organizations/organization-persons.entity';
@@ -24,31 +27,25 @@ export class Characters {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', { name: 'name', length: 255 })
+   @Column('varchar', { name: 'name', length: 255 })
    name: string;
 
-   @Column('character varying', { name: 'title', nullable: true, length: 255 })
+   @Column('varchar', { name: 'title', nullable: true, length: 255 })
    title: string | null;
 
    @Column('text', { name: 'description' })
    description: string;
 
-   @Column('character varying', { name: 'image', nullable: true, length: 255 })
+   @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @OneToMany(

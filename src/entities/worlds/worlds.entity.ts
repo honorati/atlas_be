@@ -30,16 +30,16 @@ export class Worlds {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', { name: 'name', length: 100 })
+   @Column('varchar', { name: 'name', length: 100 })
    name: string;
 
-   @Column('character varying', { name: 'title', nullable: true, length: 255 })
+   @Column('varchar', { name: 'title', nullable: true, length: 255 })
    title: string | null;
 
    @Column('text', { name: 'description' })
    description: string;
 
-   @Column('character varying', { name: 'image', nullable: true, length: 255 })
+   @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
    @CreateDateColumn()

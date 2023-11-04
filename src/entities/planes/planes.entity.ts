@@ -1,5 +1,7 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Generated,
    Index,
@@ -7,6 +9,7 @@ import {
    ManyToOne,
    OneToMany,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { Cities } from '../cities/cities.entity';
 import { InterestPoints } from '../interest-points/interest-points.entity';
@@ -24,31 +27,25 @@ export class Planes {
    @Generated('uuid')
    uniqueId: string;
 
-   @Column('character varying', { name: 'name', length: 100 })
+   @Column('varchar', { name: 'name', length: 100 })
    name: string;
 
-   @Column('character varying', { name: 'title', nullable: true, length: 255 })
+   @Column('varchar', { name: 'title', nullable: true, length: 255 })
    title: string | null;
 
    @Column('text', { name: 'description' })
    description: string;
 
-   @Column('character varying', { name: 'image', nullable: true, length: 255 })
+   @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('timestamp without time zone', {
-      name: 'updated_at',
-      nullable: true,
-   })
+   @UpdateDateColumn()
    updatedAt: Date | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @OneToMany(() => Cities, (cities) => cities.plane)

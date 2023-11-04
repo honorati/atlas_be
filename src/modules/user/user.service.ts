@@ -69,7 +69,7 @@ export class UserService {
                googleFolder,
             );
          }
-         this.userRepository.save(user);
+         await this.userRepository.save(user);
       } catch (err) {
          console.log(err);
          throw new InternalServerErrorException();

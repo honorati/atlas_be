@@ -1,11 +1,14 @@
 import {
    Column,
+   CreateDateColumn,
+   DeleteDateColumn,
    Entity,
    Index,
    JoinColumn,
    ManyToOne,
    OneToMany,
    PrimaryGeneratedColumn,
+   UpdateDateColumn,
 } from 'typeorm';
 import { RpgSystemAtributtes } from './rpg-system-atributtes.entity';
 import { RpgSystems } from './rpg-systems.entity';
@@ -20,26 +23,23 @@ export class RpgSystemCategories {
    @Column('integer', { name: 'position' })
    position: number;
 
-   @Column('character varying', { name: 'name', length: 255 })
+   @Column('varchar', { name: 'name', length: 255 })
    name: string;
 
-   @Column('character varying', {
+   @Column('varchar', {
       name: 'abbreviation',
       nullable: true,
       length: 100,
    })
    abbreviation: string | null;
 
-   @Column('timestamp without time zone', { name: 'created_at' })
+   @CreateDateColumn()
    createdAt: Date;
 
-   @Column('time without time zone', { name: 'updated_at', nullable: true })
+   @UpdateDateColumn()
    updatedAt: string | null;
 
-   @Column('timestamp without time zone', {
-      name: 'deleted_at',
-      nullable: true,
-   })
+   @DeleteDateColumn()
    deletedAt: Date | null;
 
    @OneToMany(
