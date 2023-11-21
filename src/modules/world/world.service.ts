@@ -12,7 +12,7 @@ import env from 'dotenv';
 
 env.config();
 
-const googleFolder = process.env.DRIVE_WORLDS;
+const folder = process.env.DRIVE_WORLDS;
 
 @Injectable()
 export class WorldService {
@@ -39,11 +39,11 @@ export class WorldService {
          world.user = await this.userRepository.findOneBy({
             id: userId,
          });
-         if (image.originalname) {
-            world.image = await this.fileService.uploadGoogleDrive(
+         if (image) {
+            world.image = await this.fileService.uploadFile(
                image,
                world.uniqueId,
-               googleFolder,
+               folder,
             );
          }
          await this.worldRepository.save(world);
@@ -66,11 +66,11 @@ export class WorldService {
 
    async updateWorld(worldDTO: WorldDTO, newImage: FileDTO): Promise<WorldDTO> {
       try {
-         if (newImage.originalname) {
+         if (newImage) {
             const result = await this.getWorldById(worldDTO.id);
             if (result.image) {
                try {
-                  await this.fileService.deleteGoogleDrive(result.image);
+                  await this.fileService.deleteFile(result.image);
                } catch (error) {
                   console.log(error);
                }
@@ -80,10 +80,10 @@ export class WorldService {
             } else {
                worldDTO.uniqueId = result.uniqueId;
             }
-            worldDTO.image = await this.fileService.uploadGoogleDrive(
+            worldDTO.image = await this.fileService.uploadFile(
                newImage,
                worldDTO.uniqueId,
-               googleFolder,
+               folder,
             );
          }
 

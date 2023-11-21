@@ -1,6 +1,7 @@
 import {
    Column,
    CreateDateColumn,
+   UpdateDateColumn,
    DeleteDateColumn,
    Entity,
    Generated,
@@ -8,7 +9,6 @@ import {
    JoinColumn,
    ManyToOne,
    PrimaryGeneratedColumn,
-   UpdateDateColumn,
 } from 'typeorm';
 import { Cities } from '../cities/cities.entity';
 import { Planes } from '../planes/planes.entity';

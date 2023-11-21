@@ -21,7 +21,7 @@ import env from 'dotenv';
 
 env.config();
 
-const googleFolder = process.env.DRIVE_USERS;
+const folder = process.env.DRIVE_USERS;
 
 @Injectable()
 export class UserService {
@@ -62,11 +62,11 @@ export class UserService {
          user.notification = userDTO.notification;
          const link = await createHash(userDTO.login);
          user.recoverylink = link.replace(/[^a-zA-Z0-9 ]/g, '');
-         if (avatar.originalname) {
-            user.avatar = await this.fileService.uploadGoogleDrive(
+         if (avatar) {
+            user.avatar = await this.fileService.uploadFile(
                avatar,
                user.login,
-               googleFolder,
+               folder,
             );
          }
          await this.userRepository.save(user);
@@ -159,13 +159,13 @@ export class UserService {
    ): Promise<UserReturnDTO> {
       const user = await this.getUserById(userId);
       if (user.avatar) {
-         this.fileService.deleteGoogleDrive(user.avatar);
+         this.fileService.deleteFile(user.avatar);
       }
 
-      user.avatar = await this.fileService.uploadGoogleDrive(
+      user.avatar = await this.fileService.uploadFile(
          newAvatar,
          user.login,
-         googleFolder,
+         folder,
       );
       this.userRepository.save(user);
 
