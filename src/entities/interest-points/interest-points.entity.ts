@@ -38,6 +38,9 @@ export class InterestPoints {
    @Column('varchar', { name: 'image', nullable: true, length: 255 })
    image: string | null;
 
+   @Column('varchar', { name: 'coordinate', nullable: true, length: 255 })
+   coordinate: string | null;
+
    @CreateDateColumn()
    createdAt: Date;
 
