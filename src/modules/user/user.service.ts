@@ -18,6 +18,7 @@ import { UserAuthReturn } from '../auth/dtos/user-auth-return.dto';
 import { FileService } from '../file-manager/file.service';
 import { FileDTO } from '../file-manager/dtos/file.dto';
 import env from 'dotenv';
+import { gerarCodigoAleatorio } from '~/utils/random-password';
 
 env.config();
 
@@ -60,8 +61,7 @@ export class UserService {
          user.type = UserType.INVALID;
          user.mailing = userDTO.mailing;
          user.notification = userDTO.notification;
-         const link = await createHash(userDTO.login);
-         user.recoverylink = link.replace(/[^a-zA-Z0-9 ]/g, '');
+         user.recoverylink = gerarCodigoAleatorio(6);
          if (avatar) {
             user.avatar = await this.fileService.uploadFile(
                avatar,
