@@ -7,4 +7,6 @@ export interface UserInsertDTO {
    available: boolean;
    mailing: boolean;
    notification: boolean;
+   activation: string;
+   recoveryLink: string;
 }

@@ -1,11 +1,11 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { SendMail } from './mail.service';
+import { EmailService } from './email.service';
 
-@Controller('email')
-export class MailController {
-   constructor(private readonly mailService: SendMail) {}
+@Controller('mail')
+export class EnailController {
+   constructor(private readonly mailService: EmailService) {}
 
-   @Post('enviar')
+   @Post('send')
    async sendMail(
       @Body() body: { toMail: string; subjectMail: string; bodyMail: string },
    ): Promise<void> {

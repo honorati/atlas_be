@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WorldModule } from './modules/world/world.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
    imports: [
@@ -29,6 +30,7 @@ import { WorldModule } from './modules/world/world.module';
       WorldModule,
       AuthModule,
       JwtModule,
+      EmailModule,
    ],
    controllers: [],
    providers: [

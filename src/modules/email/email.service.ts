@@ -1,31 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import env from 'dotenv';
+
+env.config();
 
 @Injectable()
-export class SendMail {
+export class EmailService {
    async sendMail(
       toMail: string,
       subjectMail: string,
       bodyMail: string,
    ): Promise<void> {
       const transporter = nodemailer.createTransport({
-         host: 'smtp.ethereal.email',
+         host: 'smtp.gmail.com',
          port: 587,
          auth: {
-            user: 'your_username',
-            pass: 'your_password',
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASSWORD,
          },
       });
 
       try {
-         const info = await transporter.sendMail({
-            from: 'seu_email@gmail.com',
+         await transporter.sendMail({
+            from: '"Atlas do Multiverso" <atlasdomultiverso@gmail.com>',
             to: toMail,
             subject: subjectMail,
             text: bodyMail,
          });
-
-         console.log('E-mail enviado: ', info);
       } catch (error) {
          console.error('Erro ao enviar e-mail: ', error);
          throw new Error('Erro ao enviar e-mail');

@@ -5,6 +5,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { FileService } from '../file-manager/file.service';
+import { EmailService } from '../email/email.service';
 
 @Module({
    imports: [
@@ -17,7 +18,7 @@ import { FileService } from '../file-manager/file.service';
       }),
    ],
    controllers: [UserController],
-   providers: [UserService, FileService],
-   exports: [UserService, FileService],
+   providers: [UserService, FileService, EmailService],
+   exports: [UserService, FileService, EmailService],
 })
 export class UserModule {}

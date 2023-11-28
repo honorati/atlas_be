@@ -78,6 +78,13 @@ export class Users {
    })
    recoverylink: string | null;
 
+   @Column('varchar', {
+      name: 'activation',
+      nullable: true,
+      length: 10,
+   })
+   activation: string | null;
+
    @CreateDateColumn()
    createdAt: Date;
 

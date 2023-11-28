@@ -2,8 +2,6 @@ import {
    Body,
    Controller,
    Delete,
-   Get,
-   Param,
    Patch,
    Post,
    UnauthorizedException,
@@ -35,7 +33,7 @@ export class UserController {
    }
 
    @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID, UserType.INVALID)
-   @Post('avatar')
+   @Post('/avatar')
    @UsePipes(ValidationPipe)
    @UseInterceptors(FileInterceptor('avatar'))
    async changeAvatar(
@@ -45,9 +43,24 @@ export class UserController {
       return this.userService.changeAvatar(userid, fileDTO);
    }
 
-   @Get('/:userid')
-   async postActivate(@Param('userid') userid) {
-      return this.userService.activateUser(userid);
+   @Post('/recover')
+   async recover(@Body() recover: UserInsertDTO) {
+      return this.userService.recoverAccount(recover.email);
+   }
+
+   @Post('/secret')
+   async secret(@Body() secret: UserInsertDTO) {
+      return this.userService.secretRecovery(secret);
+   }
+
+   @Roles(UserType.INVALID)
+   @Patch('/validate')
+   @UsePipes(ValidationPipe)
+   async validateUser(
+      @Body() userInsert: UserInsertDTO,
+      @TokenUserId() userid: number,
+   ) {
+      return this.userService.validateUser(userid, userInsert.activation);
    }
 
    @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
@@ -68,7 +81,7 @@ export class UserController {
    }
 
    @Roles(UserType.ADMIN)
-   @Post('role')
+   @Post('/role')
    @UsePipes(ValidationPipe)
    async changeRole(
       @TokenUserId() userid: number,

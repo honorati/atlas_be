@@ -17,8 +17,9 @@ import { JwtService } from '@nestjs/jwt';
 import { UserAuthReturn } from '../auth/dtos/user-auth-return.dto';
 import { FileService } from '../file-manager/file.service';
 import { FileDTO } from '../file-manager/dtos/file.dto';
+import { generateCode } from '~/utils/random-code';
 import env from 'dotenv';
-import { gerarCodigoAleatorio } from '~/utils/random-password';
+import { EmailService } from '../email/email.service';
 
 env.config();
 
@@ -31,6 +32,7 @@ export class UserService {
       private readonly userRepository: Repository<Users>,
       private readonly fileService: FileService,
       private jwtService: JwtService,
+      private readonly mailService: EmailService,
    ) {}
 
    async createUser(
@@ -61,7 +63,7 @@ export class UserService {
          user.type = UserType.INVALID;
          user.mailing = userDTO.mailing;
          user.notification = userDTO.notification;
-         user.recoverylink = gerarCodigoAleatorio(6);
+         user.activation = generateCode(6);
          if (avatar) {
             user.avatar = await this.fileService.uploadFile(
                avatar,
@@ -70,6 +72,11 @@ export class UserService {
             );
          }
          await this.userRepository.save(user);
+         this.mailService.sendMail(
+            user.email,
+            'Código de validação - Atlas do Multiverso',
+            'Acesse o site e insira o código de validação: ' + user.activation,
+         );
       } catch (err) {
          console.log(err);
          throw new InternalServerErrorException();
@@ -113,21 +120,42 @@ export class UserService {
    }
 
    async getUserByLink(link: string): Promise<Users> {
-      const user = await this.userRepository.findOneBy({
-         recoverylink: link,
-         type: UserType.INVALID,
-      });
+      const user = await this.userRepository
+         .createQueryBuilder('users')
+         .where('users.recoverylink = :link', { link: link })
+         .andWhere('users.updatedAt > :date', {
+            date: new Date(Date.now() - 30 * 60000),
+         })
+         .getOne();
       return user;
    }
 
-   async activateUser(link: string): Promise<UserAuthReturn> {
-      const user = await this.getUserByLink(link).catch(() => undefined);
+   async recoverAccount(recover: string): Promise<void> {
+      let user = await this.getUserByEmail(recover);
 
+      if (!user) {
+         user = await this.getUserByLogin(recover);
+      }
+      if (user) {
+         const hash = await createHash(user.login);
+         user.recoverylink = hash.replace(/[^a-zA-Z0-9 ]/g, '');
+         await this.userRepository.save(user);
+         this.mailService.sendMail(
+            user.email,
+            'Código de recuperação - Atlas do Multiverso',
+            'Este é seu código de recuperação, ele é valido por 30 minutos: ' +
+               user.recoverylink,
+         );
+      }
+   }
+
+   async secretRecovery(userDTO: UserInsertDTO): Promise<UserAuthReturn> {
+      const user = await this.getUserByLink(userDTO.recoveryLink);
       if (!user) {
          throw new NotFoundException();
       }
-
-      user.type = UserType.VALID;
+      user.password = await createHash(userDTO.password);
+      user.recoverylink = null;
       await this.userRepository.save(user);
 
       return {
@@ -176,6 +204,22 @@ export class UserService {
       };
 
       return userReturn;
+   }
+
+   async validateUser(userId: number, code: string): Promise<UserAuthReturn> {
+      const user = await this.getUserById(userId);
+      if (user.activation !== code) {
+         throw new BadRequestException();
+      } else {
+         user.type = UserType.VALID;
+         user.activation = null;
+      }
+      this.userRepository.save(user);
+
+      return {
+         accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
+         user: new UserReturnDTO(user),
+      };
    }
 
    async changeRole(userLogin: string, type: number): Promise<UserReturnDTO> {
