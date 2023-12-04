@@ -8,12 +8,24 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WorldModule } from './modules/world/world.module';
 import { EmailModule } from './modules/email/email.module';
+import { MulterModule } from '@nestjs/platform-express';
+
+const uploadType = process.env.UPLOAD_TYPE;
+
+let multerModuleOptions = {};
+
+if (uploadType === 'LOCAL') {
+   multerModuleOptions = {
+      dest: process.env.UPLOAD_PATH,
+   };
+}
 
 @Module({
    imports: [
       ConfigModule.forRoot({
          envFilePath: ['.env'],
       }),
+      MulterModule.register(multerModuleOptions),
       TypeOrmModule.forRoot({
          type: 'mysql',
          database: process.env.DB_DATABASE,

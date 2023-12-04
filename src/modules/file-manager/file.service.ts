@@ -6,8 +6,6 @@ import env from 'dotenv';
 
 env.config();
 
-const uploadType = process.env.UPLOAD_TYPE;
-
 Injectable();
 export class FileService {
    async uploadFile(
@@ -15,56 +13,48 @@ export class FileService {
       name: string,
       folder: string,
    ): Promise<string> {
-      if (uploadType == 'GOOGLE') {
-         if (folder === undefined) {
-            return null;
-         }
-         const auth = new google.auth.GoogleAuth({
-            keyFile: 'api-key.json',
-            scopes: ['https://www.googleapis.com/auth/drive'],
+      if (folder === undefined) {
+         return null;
+      }
+      const auth = new google.auth.GoogleAuth({
+         keyFile: 'api-key.json',
+         scopes: ['https://www.googleapis.com/auth/drive'],
+      });
+
+      const drive = google.drive({ version: 'v3', auth });
+
+      const media = {
+         mimeType: file.mimetype,
+         body: Readable.from(file.buffer),
+      };
+
+      try {
+         const resp = await drive.files.create({
+            requestBody: {
+               name: name,
+               parents: [folder],
+            },
+            media: media,
+            fields: 'id',
          });
-
-         const drive = google.drive({ version: 'v3', auth });
-
-         const media = {
-            mimeType: file.mimetype,
-            body: Readable.from(file.buffer),
-         };
-
-         try {
-            const resp = await drive.files.create({
-               requestBody: {
-                  name: name,
-                  parents: [folder],
-               },
-               media: media,
-               fields: 'id',
-            });
-            return resp.data.id;
-            //https://drive.google.com/uc?export=view&id=
-         } catch (error) {
-            throw new InternalServerErrorException();
-         }
-      } else {
-         console.log('Teste');
+         return resp.data.id;
+         //https://drive.google.com/uc?export=view&id=
+      } catch (error) {
+         throw new InternalServerErrorException();
       }
    }
 
    async deleteFile(fileId: string): Promise<void> {
-      if (uploadType == 'GOOGLE') {
-         const auth = new google.auth.GoogleAuth({
-            keyFile: 'api-key.json',
-            scopes: ['https://www.googleapis.com/auth/drive'],
-         });
+      const auth = new google.auth.GoogleAuth({
+         keyFile: 'api-key.json',
+         scopes: ['https://www.googleapis.com/auth/drive'],
+      });
 
-         const drive = google.drive({ version: 'v3', auth });
-         try {
-            drive.files.delete({ fileId: fileId });
-         } catch (error) {
-            throw new InternalServerErrorException(error);
-         }
-      } else {
-         console.log('Teste');
+      const drive = google.drive({ version: 'v3', auth });
+      try {
+         drive.files.delete({ fileId: fileId });
+      } catch (error) {
+         throw new InternalServerErrorException(error);
       }
    }
 }

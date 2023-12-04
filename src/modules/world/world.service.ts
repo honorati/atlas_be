@@ -13,6 +13,7 @@ import env from 'dotenv';
 env.config();
 
 const folder = process.env.DRIVE_WORLDS;
+const uploadType = process.env.UPLOAD_TYPE;
 
 @Injectable()
 export class WorldService {
@@ -35,11 +36,11 @@ export class WorldService {
          world.name = worldDTO.name;
          world.title = worldDTO.title;
          world.description = worldDTO.description;
-         world.uniqueId = uuidv4();
+         world.uniqueId = worldDTO.uniqueId;
          world.user = await this.userRepository.findOneBy({
             id: userId,
          });
-         if (image) {
+         if (image && uploadType === 'GOOGLE') {
             world.image = await this.fileService.uploadFile(
                image,
                world.uniqueId,

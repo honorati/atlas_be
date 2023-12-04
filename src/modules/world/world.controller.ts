@@ -16,6 +16,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { WorldService } from './world.service';
 import { WorldDTO } from './dto/world.dto';
 import { FileDTO } from '../file-manager/dtos/file.dto';
+import { diskStorage } from 'multer';
+
+const uploadType = process.env.UPLOAD_TYPE;
 
 @Controller('world')
 export class WorldController {
@@ -24,19 +27,53 @@ export class WorldController {
    @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
    @Post()
    @UsePipes(ValidationPipe)
-   @UseInterceptors(FileInterceptor('image'))
+   @UseInterceptors(
+      FileInterceptor('imageMap', {
+         storage: diskStorage({
+            destination: process.env.UPLOAD_PATH,
+            filename: (req, file, cb) => {
+               if (uploadType === 'LOCAL') {
+                  const newFileName =
+                     req.body.uniqueId +
+                     '.' +
+                     file.originalname.split('.').pop();
+                  cb(null, newFileName);
+               } else {
+                  cb(null, file.originalname);
+               }
+            },
+         }),
+      }),
+   )
    async manageWorld(
       @Body() worldDTO: WorldDTO,
-      @TokenUserId() userid: number,
+      @TokenUserId() userId: number,
       @UploadedFile() fileDTO: FileDTO,
    ) {
-      return this.worldService.createWorld(userid, worldDTO, fileDTO);
+      return this.worldService.createWorld(userId, worldDTO, fileDTO);
    }
 
    @Roles(UserType.ADMIN, UserType.PREMIUM, UserType.VALID)
    @Patch()
    @UsePipes(ValidationPipe)
-   @UseInterceptors(FileInterceptor('image'))
+   @UseInterceptors(
+      FileInterceptor('imageMap', {
+         storage: diskStorage({
+            destination: process.env.UPLOAD_PATH,
+            filename: (req, file, cb) => {
+               if (uploadType === 'LOCAL') {
+                  const newFileName =
+                     req.body.uniqueId +
+                     '.' +
+                     file.originalname.split('.').pop();
+                  cb(null, newFileName);
+               } else {
+                  cb(null, file.originalname);
+               }
+            },
+         }),
+      }),
+   )
    async updateWorld(
       @Body() worldDTO: WorldDTO,
       @UploadedFile() fileDTO: FileDTO,
